@@ -2,6 +2,7 @@ import java.io.*;
 
 public class Terminal {
     public static final String ANSI_RESET_COLOR = "\u001b[0m";
+    public static final String DEFAULT_TEXT_COLOR = "\u001b[38;5;0m";
 
     public static PrintWriter pw;
     public static int WIDTH, HEIGHT;
@@ -30,30 +31,36 @@ public class Terminal {
         pixelHistory[x][y] = bgColor;
         annotationHistory[x][y] = text;
         
-        pw.print(bgColor + text + ANSI_RESET_COLOR);
+        pw.print(DEFAULT_TEXT_COLOR + bgColor + text + ANSI_RESET_COLOR);
         x++;
     }
 
     public static void setPixelShallow(String bgColor, char text) {
-        pw.print(bgColor + text + ANSI_RESET_COLOR);
+        pw.print(DEFAULT_TEXT_COLOR + bgColor + text + ANSI_RESET_COLOR);
         x++;
     }
 
     public static void setPixel(String bgColor) {
         pixelHistory[x][y] = bgColor;
         
-        pw.print(bgColor + ' ' + ANSI_RESET_COLOR);
+        pw.print(DEFAULT_TEXT_COLOR + bgColor + ' ' + ANSI_RESET_COLOR);
         x++;
     }
 
     public static void setPixel(char text) {
         annotationHistory[x][y] = text;
 
-        pw.print(text);
+        pw.print(DEFAULT_TEXT_COLOR + text + ANSI_RESET_COLOR);
         x++;
     }
 
     public static void flush() {
+        setXY(1, HEIGHT);
+        for (int i=0; i<WIDTH; i++)
+            if (pixelHistory != null && pixelHistory[x][y] != null)
+                pw.print(pixelHistory[x++][y] + ' ');
+
+        setXY(1, HEIGHT);
         pw.flush();
     }
 
@@ -64,7 +71,7 @@ public class Terminal {
     }
 
     public static void print(String bgColor, String s) {
-        pw.print(bgColor + s + ANSI_RESET_COLOR);
+        pw.print(DEFAULT_TEXT_COLOR + bgColor + s + ANSI_RESET_COLOR);
 
         for (int i=0; i<s.length(); i++)
             annotationHistory[x+i][y] = s.charAt(i);
@@ -73,7 +80,7 @@ public class Terminal {
     }
 
     public static void print(String s) {
-        pw.print(s);
+        pw.print(DEFAULT_TEXT_COLOR + s);
 
         for (int i=0; i<s.length(); i++)
             annotationHistory[x+i][y] = s.charAt(i);
@@ -82,7 +89,7 @@ public class Terminal {
     }
 
     public static void printShallow(String bgColor, String s) {
-        pw.print(bgColor + s + ANSI_RESET_COLOR);
+        pw.print(DEFAULT_TEXT_COLOR + bgColor + s + ANSI_RESET_COLOR);
         x += s.length();
     }
 
