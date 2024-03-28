@@ -1,6 +1,17 @@
 ![img/home_art.png](img/home_art.png)
 
+# Project Description
+
 Welcome to Catan! This is a project I made during February/March in 2024 intending to make an easy-to-use terminal-based version of the popular board game Catan.
+
+As of right now, it contains 5333 lines (163,132 characters) of Java code. The main directory contains these things:
+ - `app.sh`: The bash script to compile and run the Java code
+ - `debug-messages.txt`: Where error messages get sent. Hopefully should be irrelevant if you download this repo to play on your own (fingers crossed)
+ - `README.md`: This file
+ - `class`: Contains the compiled Java code
+ - `data`: Contains the text files that describe the images used in the game
+ - `src`: Contains the Java files that run the game
+ - `img`: Contains images for this file. Not necessary for the functionality of the game
 
 # Getting Started
 
