@@ -4,7 +4,7 @@
 
 Welcome to Catan! This is a project I made during February/March in 2024 intending to make an easy-to-use terminal-based version of the popular board game Catan.
 
-As of right now, it contains 5333 lines (163,132 characters) of Java code. The main directory contains these things:
+As of right now, it contains 5333 lines (163,132 characters) of Java code. The main directory contains these things:  
  - `app.sh`: The bash script to compile and run the Java code
  - `debug-messages.txt`: Where error messages get sent. Hopefully should be irrelevant if you download this repo to play on your own (fingers crossed)
  - `README.md`: This file
