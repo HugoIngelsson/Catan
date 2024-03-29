@@ -30,4 +30,23 @@ Here is a summary of the controls you'll need to play the game:
  - `SPACE`: How to interact with different screen elements. The button you'll press with space will almost always be highlighted in a golden color.
  - `R`: Roll the dice (when possible).
  - `ENTER`: Pass turn to the next player (only works when not in another menu and after rolling the dice).
- - ...
+ - `TAB`: Shift into or out of "road building mode" after rolling the dice and not in a menu.
+ - `D`: Open the development card menu.
+ - `A`: Buy a development card.
+ - `T`: Open the trade menu.
+
+I also have a section in this README file that goes deeper into how the game is played ("In-Depth Explanation Through a Game"). If you're confused on any of these controls, go there to gain further insight.
+
+# Future Additions
+
+Though the main game of Catan is completely done, there are a couple of things I'd like to add if I ever have time (if you're reading this years after I made this and none of these things got done... well, I guess I never had time).
+
+On the top of my list are:
+ - Make the other buttons in the menu selection actually do something. Right now there's `New Game`, `Options`, and `Rules`, but only the first of the three actually do something. I suppose this file serves as a sort of substitute for the other two, but it'd be nice if learning how to play the game could be self-contained within the game itself. As a temporary fix, I could add simple GUIs to each that only have text on them for each, but eventually being able to change the controls and having some kind of nice graphics for the rule book could be a nice thing to include.
+ - Comment all of my code. I made the mistake of simply blazing through the coding without caring to add explanations to code blocks. It worked for me since the project was contained within about a month of production, but if I ever return that make things really difficult. It really sucks to do, though...
+ - Add multiplayer on local networks. Pretty self-explanatory: make the game playable online by having some kind of lobby/hosting feature. Included in this would be having someone act as the central server that keeps track of the entire game state with other players simply sending messages to that server when trying to do things. This would solve the issue of players being able to see exactly what resources and development cards each other have, though I'd imagine it'd take a large amount of work to implement.
+ - Create an API for bots and allow players to play against NPCs. This allows players to play alone or with fewer players and could also allow someone like you (the person reading this) to make your own bots.
+
+# In-Depth Explanation Through a Game
+
+WIP
