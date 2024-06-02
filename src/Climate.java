@@ -73,6 +73,11 @@ public class Climate {
         if (fillup >= 10) Artist.drawColorBox(7, 46, 9, 46, "red");
         if (fillup >= 11) Artist.drawColorBox(7, 45, 9, 45, "dark_red");
         if (fillup >= 12) Artist.drawColorBox(7, 44, 9, 44, "dark_red");
+
+        Terminal.setXY(11, 52);
+        Terminal.print("\u001b[48;5;240m\u001b[38;5;255m" + thresh1);
+        Terminal.setXY(11, 48);
+        Terminal.print("\u001b[48;5;240m\u001b[38;5;255m" + thresh2);
     }
 
     public static boolean hasFlooded() {
