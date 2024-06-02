@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Artist {
     static final String[] COLORS = {
@@ -14,7 +15,7 @@ public class Artist {
         "\u001b[48;5;52m" , "\u001b[48;5;229m", "\u001b[48;5;200m", "\u001b[48;5;213m",
         "\u001b[48;5;140m", "\u001b[48;5;96m" , "\u001b[48;5;117m", "\u001b[48;5;173m",
         "\u001b[48;5;160m", "\u001b[48;5;202m", "\u001b[48;5;179m", "\u001b[48;5;203m",
-        "\u001b[0m"       , "\u001b[0m"
+        "\u001b[48;5;23m" , "\u001b[0m"       , "\u001b[0m"
     };
 
     public static void drawFromFile(String fileName, int x, int y) throws IOException {
@@ -170,6 +171,42 @@ public class Artist {
         drawFromFile(file, 144, 3);
     }
 
+    public static void animateTransition(String fileName, int x, int y, int frames, int perFrame) throws InterruptedException, IOException {
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        ArrayList<String> pixels = new ArrayList<>();
+        
+        String s;
+        while ((s = br.readLine()) != null) {
+            pixels.add(s);
+        }
+        
+        int numX = pixels.get(0).length();
+        int numY = pixels.size();
+        while (frames --> 0) {
+            for (int i=0; i<perFrame; i++) {
+                int randX = (int)(numX*Math.random());
+                int randY = (int)(numY*Math.random());
+
+                if (pixels.get(randY).length() <= randX ||
+                    pixels.get(randY).charAt(randX) == ' ') {
+                    i--;
+                }
+                else {
+                    Terminal.setXY(x+randX, y+randY);
+                    Terminal.setPixel(COLORS[pixels.get(randY).charAt(randX)-'!'], ' ');
+                    if (Board.waves[y+randY][x+randX])
+                        drawWave(x+randX, y+randY);
+                }
+            }
+
+            Terminal.flush();
+            Thread.sleep(33);
+        }
+
+        br.close();
+        drawFromFile(fileName, x, y);
+    }
+
     public static void drawColorBox(int x1, int y1, int x2, int y2, String color) {
         switch (color) {
             case "red":
@@ -193,6 +230,21 @@ public class Artist {
             case "beige":
                 color = "\u001b[48;5;230m";
                 break;
+            case "paper_yellow":
+                color = "\u001b[48;5;221m";
+                break;
+            case "gold":
+                color = "\u001b[48;5;214m";
+                break;
+            case "orange":
+                color = "\u001b[48;5;208m";
+                break;
+            case "rose":
+                color = "\u001b[48;5;202m";
+                break;
+            case "dark_red":
+                color = "\u001b[48;5;124m";
+                break;
             default:
                 color = "\u001b[48;5;0m";
                 break;
@@ -202,6 +254,57 @@ public class Artist {
             Terminal.setXY(x1, i);
             for (int j=x1; j<=x2; j++) {
                 Terminal.setPixelShallow(color, ' ');
+            }
+        }
+    }
+
+    public static void drawColorBoxDeep(int x1, int y1, int x2, int y2, String color) {
+        switch (color) {
+            case "red":
+                color = "\u001b[48;5;9m";
+                break;
+            case "blue":
+                color = "\u001b[48;5;12m";
+                break;
+            case "white":
+                color = "\u001b[48;5;255m";
+                break;
+            case "green":
+                color = "\u001b[48;5;10m";
+                break;
+            case "light_red":
+                color = "\u001b[48;5;216m";
+                break;
+            case "light_green":
+                color = "\u001b[48;5;150m";
+                break;
+            case "beige":
+                color = "\u001b[48;5;230m";
+                break;
+            case "paper_yellow":
+                color = "\u001b[48;5;221m";
+                break;
+            case "gold":
+                color = "\u001b[48;5;214m";
+                break;
+            case "orange":
+                color = "\u001b[48;5;208m";
+                break;
+            case "rose":
+                color = "\u001b[48;5;202m";
+                break;
+            case "dark_red":
+                color = "\u001b[48;5;124m";
+                break;
+            default:
+                color = "\u001b[48;5;0m";
+                break;
+        }
+
+        for (int i=y1; i<=y2; i++) {
+            Terminal.setXY(x1, i);
+            for (int j=x1; j<=x2; j++) {
+                Terminal.setPixel(color, ' ');
             }
         }
     }

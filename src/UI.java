@@ -224,7 +224,7 @@ public class UI {
                 if (diceHaveBeenThrown && mode < 2 && freeRoads == 0) {
                     diceHaveBeenThrown = false;
 
-                    if (Board.peekPlayer().getVP() == Catan.VP_REQUIREMENT) {
+                    if (Board.peekPlayer().getVP() >= Catan.VP_REQUIREMENT) {
                         ChatBox.victory(Board.peekPlayer());
                         return true;
                     }
@@ -280,10 +280,13 @@ public class UI {
                     }
                 }
             }
-            else if (buffer[bufferID] == 127) {
-                // delete
+            else if (buffer[bufferID] == 127) { // delete
                 try {
-                    
+                    Board.peekPlayer().increaseResource(Resource.BRICK, 1);
+                    Board.peekPlayer().increaseResource(Resource.ORE  , 1);
+                    Board.peekPlayer().increaseResource(Resource.WHEAT, 1);
+                    Board.peekPlayer().increaseResource(Resource.WOOD , 1);
+                    Board.peekPlayer().increaseResource(Resource.SHEEP, 1);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -294,12 +297,21 @@ public class UI {
                     if (mode == 0) {
                         if (Board.canPlaceTown(cursorPos) && freeRoads == 0) {
                             Board.getBuildingAt(cursorPos).build(Board.peekPlayer());
+
                             ChatBox.buildTown(Board.peekPlayer());
                             Board.renderPlayerStats();
+                            if (Catan.CLIMATE) {
+                                if (Climate.increment())
+                                    return true;
+                            }
                         }
                         else if (Board.canPlaceCity(cursorPos) && freeRoads == 0) {
                             Board.getBuildingAt(cursorPos).upgrade();
                             Board.renderPlayerStats();
+                            if (Catan.CLIMATE) {
+                                if (Climate.increment())
+                                    return true;
+                            }
                         }
                     }
                     else if (mode == 1) {
@@ -337,6 +349,11 @@ public class UI {
                                 if (t.corner().equals(robberCursor)) {
                                     t.flipBlocked();
                                     robberTile = t;
+
+                                    if (Catan.CLIMATE && t.getResource() == Resource.DESERT) {
+                                        ChatBox.desertRobber(Board.peekPlayer());
+                                        Climate.decrement();
+                                    }
 
                                     curGUI = new StealGUI(Board.getPlayersOnTile(t), 34, 45);
                                     if (!curGUI.buttonPress(-1)) {
@@ -413,6 +430,9 @@ public class UI {
                     cardHasBeenUsed = false;
                     int roll = DiceRender.animateRolling();
                     if (roll == 7) {
+                        if (Catan.CLIMATE)
+                            Board.spreadDesert();
+
                         for (int i=0; i<Catan.PLAYERS; i++) {
                             Player p = Board.nextPlayer();
                             if (p.getTotalResources() > 7)

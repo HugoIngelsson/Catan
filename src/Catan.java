@@ -8,6 +8,7 @@ public class Catan {
     public static int VP_REQUIREMENT = 10;
     public static int starter;
     public static boolean inGame = true;
+    public static boolean CLIMATE = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         inGame = false;

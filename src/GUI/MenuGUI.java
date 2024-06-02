@@ -35,6 +35,7 @@ public class MenuGUI implements GUI {
             terminate();
             UI.curGUI = new PlayerSelectGUI(33, 6);
             UI.curGUI.render();
+            Catan.CLIMATE = false;
 
             return false;
         }
@@ -43,9 +44,18 @@ public class MenuGUI implements GUI {
             Catan.inGame = false;
 
             Artist.drawFromFile(Catan.HOME_BACKGROUND, 1, 1);
+            return true;
+        }
+        else if (height == 1 && !Catan.inGame) {
+            terminate();
+            UI.curGUI = new PlayerSelectGUI(33, 6);
+            UI.curGUI.render();
+            Catan.CLIMATE = true;
+
+            return false;
         }
         
-        return true;
+        return false;
     }
 
     public void moveUp() throws IOException {

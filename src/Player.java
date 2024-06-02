@@ -252,6 +252,10 @@ public class Player {
                 this.sheep >= demand[4];
     }
 
+    public void resetTrades() {
+        for (int i=0; i<5; i++) trades[i] = 4;
+    }
+
     public int getNumTowns() {
         return this.numTowns;
     }

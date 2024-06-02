@@ -224,6 +224,55 @@ public class Board {
 
         for (int i=0; i<Catan.PLAYERS; i++)
             ChatBox.receiveDiceRoll(nextPlayer());
+
+        if (Catan.CLIMATE && Climate.isScarce()) {
+            for (Tile t : tiles) {
+                if (t.isDepleted() && t.getCollectedThisTurn() > 0) {
+                    t.flipDepleted();
+                }
+                else if (t.getResource() == Resource.SHEEP || 
+                            t.getResource() == Resource.WHEAT || 
+                            t.getResource() == Resource.WOOD) {
+                    if (t.getCollectedThisTurn() >= 4) {
+                        t.flipDepleted();
+                        ChatBox.overuse(t);
+                    }
+                }
+                else if (t.getResource() == Resource.ORE || 
+                            t.getResource() == Resource.BRICK) {
+                    int dist = Math.abs(7 - t.getNumber());
+                    if (t.getCollectedThisTurn() >= dist+2) {
+                        t.diminish();
+                        ChatBox.depletion(t);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void spreadDesert() {
+        ArrayList<Tile> deserts = new ArrayList<>();
+        ArrayList<Tile> depleted = new ArrayList<>();
+        for (Tile t : tiles) {
+            if (t.getResource() == Resource.DESERT)
+                deserts.add(t);
+
+            if (t.isDepleted())
+                depleted.add(t);
+        }
+        
+        for (Tile t2 : depleted) {
+            loop:
+            for (Tile t1 : deserts) {
+                for (int i=0; i<6; i++) {
+                    if (t1.corner().equals(t2.corner().add(TILE_TO_TILE[i]))) {
+                        ChatBox.desertSpread(t2);
+                        t2.desert();
+                        break loop;
+                    }
+                }
+            }
+        }
     }
 
     public static boolean canPlaceRoad(Point p, int dir) {
@@ -395,6 +444,10 @@ public class Board {
 
         ChatBox.clear(1);
         ChatBox.displayMessages();
+
+        if (Catan.CLIMATE) {
+            Climate.initClimate();
+        }
 
         Terminal.flush();
     }

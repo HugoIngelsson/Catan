@@ -13,6 +13,10 @@ public class Tile {
 
     private boolean blocked;
 
+    private int resourcesThisTurn;
+    private boolean depleted;
+    private int lastTurnCollected;
+
     public Tile(Resource resource, int number, int x, int y) {
         this.resource = resource;
         this.number = number;
@@ -53,10 +57,27 @@ public class Tile {
     }
 
     public void renderNumber() throws IOException {
-        if (!blocked && resource != Resource.DESERT)
+        if (!blocked && resource != Resource.DESERT) {
             Artist.drawNumber(number, x+7, y+3);
-        else if (blocked)
+            if (depleted)
+                Artist.drawColorBoxDeep(x+4, y+4, x+14, y+4, "dark_red");
+        }
+        else if (blocked) {
+            if (depleted)
+                Artist.drawColorBoxDeep(x+4, y+4, x+14, y+4, "dark_red");
             Artist.drawFromFile(ROBBER_SPRITE, x+7, y+3);
+        }
+    }
+
+    public void rerender() throws IOException {
+        Artist.drawFromFile(spriteFile, x, y);
+        renderNumber();
+
+        for (Building b : Board.buildings.values()) {
+            b.shallowRender();
+        }
+
+        Cursor.drawCursor(UI.cursorPos);
     }
 
     public Point center() {
@@ -81,16 +102,89 @@ public class Tile {
 
     public void flipBlocked() throws IOException {
         if (blocked) {
-            if (number != 7)
+            if (number != 7) {
                 Artist.drawNumber(number, x+7, y+3);
-            else
+                if (depleted)
+                    Artist.drawColorBoxDeep(x+4, y+4, x+14, y+4, "dark_red");
+            }
+            else {
                 Artist.drawFromFile(PATH + "desert_patch.txt", x+7, y+3);
+            }
             this.blocked = false;
         }
         else {
             Artist.drawFromFile(ROBBER_SPRITE, x+7, y+3);
             UI.robberTile = this;
             this.blocked = true;
+        }
+    }
+
+    public void plusResourceThisTurn() {
+        if (UI.turn == this.lastTurnCollected) {
+            resourcesThisTurn++;
+        }
+        else {
+            resourcesThisTurn = 1;
+            lastTurnCollected = UI.turn;
+        }
+    }
+
+    public boolean isDepleted() {
+        return this.depleted;
+    }
+
+    public void flipDepleted() {
+        this.depleted = !this.depleted;
+        try {
+            rerender();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void diminish() {
+        if (this.number < 7)
+            this.number--;
+        else
+            this.number++;
+        
+        try {
+            rerender();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getCollectedThisTurn() {
+        if (UI.turn == this.lastTurnCollected)
+            return this.resourcesThisTurn;
+        else return 0;
+    }
+
+    public String toString() {
+        switch (resource) {
+            case BRICK: return "\u001b[38;5;124mBRICK";
+            case ORE:   return "\u001b[38;5;250mORE";
+            case WHEAT: return "\u001b[38;5;221mWHEAT";
+            case WOOD:  return "\u001b[38;5;130mWOOD";
+            case SHEEP: return "\u001b[38;5;82mSHEEP";
+            default:    return "\u001b[38;5;202mDESERT";
+        }
+    }
+
+    public void desert() {
+        this.spriteFile = PATH + "desert.txt";
+        this.resource = Resource.DESERT;
+        this.number = 7;
+        this.depleted = false;
+
+        try {
+            rerender();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

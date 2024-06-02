@@ -65,7 +65,8 @@ public class Building {
         this.player.decreaseResource(Resource.WHEAT, 1);
         this.player.decreaseResource(Resource.SHEEP, 1);
 
-        if (portTrade != null) this.player.addTrade(portTrade);
+        if (portTrade != null && (!Catan.CLIMATE || !Climate.hasFlooded())) 
+            this.player.addTrade(portTrade);
     }
 
     public void upgrade() throws IOException {
@@ -145,7 +146,11 @@ public class Building {
 
         for (Tile t : adjacentTiles) {
             if (!t.getIsBlocked() && t.getNumber() == n) {
-                player.increaseResource(t.getResource(), this.yield);
+                if (!Climate.isScarce() || !t.isDepleted())
+                    player.increaseResource(t.getResource(), this.yield);
+
+                t.plusResourceThisTurn();
+                if (this.yield == 2) t.plusResourceThisTurn();
             }
         }
     }

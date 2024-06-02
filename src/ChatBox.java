@@ -99,7 +99,10 @@ public class ChatBox {
     }
 
     public static void buildTown(Player p) {
-        addMessage(p.toString() + RESET + " built a town!");
+        if (Catan.CLIMATE && Catan.starter >= Catan.PLAYERS*4)
+            addMessage(p.toString() + RESET + " built a town, increasing the climate gauge by 1!");
+        else
+            addMessage(p.toString() + RESET + " built a town!");
     }
 
     public static void buildSecondTown(Player p) {
@@ -123,7 +126,11 @@ public class ChatBox {
     }
 
     public static void buildCity(Player p) {
-        addMessage(p.toString() + RESET + " upgraded a town into a city!");
+        if (Catan.CLIMATE)
+            addMessage(p.toString() + RESET + " upgraded a town into a city, increasing" +
+                " the climate gauge by 1!");
+        else
+            addMessage(p.toString() + RESET + " upgraded a town into a city!");
     }
 
     public static void buildRoad(Player p) {
@@ -284,6 +291,40 @@ public class ChatBox {
         for (int i=0; i<5; i++) if (discarded[i] > 0) partCount++;
 
         addMessage("~ " + p.toString() + RESET + " had to discard " + formatReturns(discarded, partCount) + ".");
+    }
+
+    public static void scarceResources() {
+        addMessage("The world is now 1/3rd of the way to \u001b[38;5;124mCLIMATE \u001b[38;5;124mCATASTROPHE" +
+                   RESET + ". Natural resources are now unstable.");
+    }
+
+    public static void overuse(Tile t) {
+        addMessage("A " + t + RESET + " tile has been overused, meaning it won't produce" +
+                    " any more resources until it's had time to replenish.");
+    }
+
+    public static void desertSpread(Tile t) {
+        addMessage("The \u001b[38;5;202mDESERT" + RESET + " spreads, overtaking an overused " + t + RESET + " tile.");
+    }
+
+    public static void depletion(Tile t) {
+        addMessage("A " + t + RESET + " tile is starting to get depleted, meaning it will" +
+                    " produce resources more rarely.");
+    }
+
+    public static void flooding() {
+        addMessage("The world is now 2/3rd of the way to \u001b[38;5;124mCLIMATE \u001b[38;5;124mCATASTROPHE" +
+                   RESET + ". Sea levels rise, removing all trade ports.");
+    }
+
+    public static void globalClimateDeath() {
+        addMessage("The world experiences \u001b[38;5;124mCLIMATE \u001b[38;5;124mCATASTROPHE" +
+                   RESET + ". All players \u001b[38;5;124mLOSE" + RESET + "!");
+    }
+
+    public static void desertRobber(Player p) {
+        addMessage(p.toString() + RESET + " placed the robber in the desert, decreasing the " +
+                    "climate gauge by 1.");
     }
 
     private static String formatReturns(int[] resourceNums, int partCount) {

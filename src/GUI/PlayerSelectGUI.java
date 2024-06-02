@@ -243,6 +243,8 @@ public class PlayerSelectGUI implements GUI {
             terminate();
 
             UI.curGUI = new MenuGUI(45, 10);
+            if (Catan.CLIMATE)
+                UI.curGUI.moveDown();
             UI.curGUI.render();
         }
         else if (in == '\t') {
