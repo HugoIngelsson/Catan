@@ -282,11 +282,19 @@ public class UI {
             }
             else if (buffer[bufferID] == 127) { // delete
                 try {
+                    // uncomment for testing mode (i.e. unlimited resources)
+                    /*
                     Board.peekPlayer().increaseResource(Resource.BRICK, 1);
                     Board.peekPlayer().increaseResource(Resource.ORE  , 1);
                     Board.peekPlayer().increaseResource(Resource.WHEAT, 1);
                     Board.peekPlayer().increaseResource(Resource.WOOD , 1);
                     Board.peekPlayer().increaseResource(Resource.SHEEP, 1);
+                    */
+
+                    ///*
+                    if (Climate.increment())
+                        return true;
+                    //*/
                 }
                 catch (Exception e) {
                     e.printStackTrace();
