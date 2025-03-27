@@ -291,10 +291,11 @@ public class UI {
                     Board.peekPlayer().increaseResource(Resource.SHEEP, 1);
                     */
 
-                    ///*
+                    // uncomment for testing climate mode
+                    /*
                     if (Climate.increment())
                         return true;
-                    //*/
+                    */
                 }
                 catch (Exception e) {
                     e.printStackTrace();
